@@ -18,4 +18,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/cliente/{nombre}', 'cliente_controller@reporte');
+Route::post('/cliente', 'cliente_controller@reporte');
+
+Route::post('/check_login', 'auth_controller@check_login');

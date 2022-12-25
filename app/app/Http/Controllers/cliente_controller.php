@@ -8,16 +8,16 @@ use Illuminate\Http\Request;
 class cliente_controller extends Controller
 {
     //
-    public function reporte($nombre){
-        $nombres = explode("_",$nombre)[0];
-        $p_apellido = explode("_",$nombre)[1];
+    public function reporte(Request $request){
+        $nombres = $request->input('nombres');
+        $p_apellido = $request->input('p_apellido');
         $r = DB::select('call reporte(?,?)', array($nombres,$p_apellido));
         return $r;
     }
 
-    public function vista_reporte($nombre){
+    public function vista_reporte(Request $request){
         
-        $r = $this->reporte($nombre)[0];
+        $r = $this->reporte($request)[0];
         return view('cliente', 
             [ 
                 "codigo_entrenador" => $r->Codigo_Entrenador,

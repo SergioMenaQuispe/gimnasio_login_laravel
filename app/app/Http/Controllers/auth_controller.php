@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use DB;
 use Illuminate\Http\Request;
-use Validator,Redirect,Response;
-Use App\User;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Session;
+use App\Models\cliente;
+use App\Http\Controllers\cliente_controller;
+
  
 class auth_controller extends Controller
 {
@@ -16,17 +15,20 @@ class auth_controller extends Controller
         return view('login');
     }
 
-    public function login(Request $request){
-        request()->validate([
-            'nombres' => 'required' ,
-            'primer_apellido' => 'required'
-        ]);
+    public function check_login(Request $request){
+        $clientes = DB::table('cliente')->get()[0];
+        
+        $nombres = $request->input('nombres');
+        $p_apellido = $request->input('p_apellido');
 
-        $credentials = $request->only('nombres','primer_apellido');
-        if(Auth::attempt($credentials)){
-            return redirect()->intended('cliente');
+        $result = DB::select('call existe_cliente(?,?)', array($nombres,$p_apellido));
+
+        if(count($result) == 0){
+            return view('/login', array('message' => 'No se encontró el cliente')) ;
+        }else{
+            $controller = new cliente_controller;
+            return $controller->vista_reporte($request);
         }
 
-        return Redirect::to('login')->withSuccess('No estas en la lista F');
     }
 }

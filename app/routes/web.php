@@ -18,6 +18,6 @@ Route::get('/', function () {
 });
 
 
-Route::get('/cliente/{nombre}', 'cliente_controller@vista_reporte');
+Route::post('/cliente', 'cliente_controller@vista_reporte');
 
 Route::get('/login', 'auth_controller@index');
